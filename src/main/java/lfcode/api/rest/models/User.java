@@ -3,23 +3,20 @@ package lfcode.api.rest.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 @Entity
 @Table(name= "TB_USERS")
-public class User implements Serializable{
+public class User implements UserDetails  {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -44,8 +41,17 @@ public class User implements Serializable{
 	 @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
 	 private LocalDateTime lastUpdateDate;
 
-	 @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+	 @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	 private List<Phone> phone = new ArrayList<Phone>();
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	 @JoinTable(name = "user_role", uniqueConstraints = @UniqueConstraint(
+			 columnNames = {"user_id", "role_id"}, name = "unique_role_user"),
+	 		 joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", table = "TB_USERS", unique = false,
+			 foreignKey = @ForeignKey(name = "user_fk", value = ConstraintMode.CONSTRAINT)),
+			 inverseJoinColumns = @JoinColumn (name = "role_id", referencedColumnName = "id", table = "TB_ROLES", unique = false, updatable = false,
+			 foreignKey = @ForeignKey(name = "role_fk", value = ConstraintMode.CONSTRAINT)))
+	 private List<Role> roles;
 	 
 	 
 	public Long getId() {
@@ -65,7 +71,7 @@ public class User implements Serializable{
 	}
 
 	public String getUsername() {
-		return username;
+		return this.username;
 	}
 
 	public void setUsername(String username) {
@@ -73,7 +79,7 @@ public class User implements Serializable{
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	public void setPassword(String password) {
@@ -128,6 +134,32 @@ public class User implements Serializable{
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		return true;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
 		return true;
 	}
 	 
