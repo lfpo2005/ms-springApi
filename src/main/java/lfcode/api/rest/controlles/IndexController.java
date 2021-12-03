@@ -55,17 +55,27 @@ public class IndexController {
 
 	        user.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
 	        user.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+	        
+	        for (int pos = 0; pos < user.getPhone().size(); pos ++ ) {
+	        	user.getPhone().get(pos).setUser(user);
+	        }
 	        userRepository.save(user);
 
 	        return ResponseEntity.status(HttpStatus.CREATED).body(user);
 	}
 	
-	@PutMapping("/{id}")
+	
+	
+	@PutMapping("/updateUser/{id}")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id){
 		
         Optional<User> userOptional = userRepository.findById(id);
 
            var user = userOptional.get();
+           
+           for (int pos = 0; pos < user.getPhone().size(); pos ++ ) {
+	        	user.getPhone().get(pos).setUser(user);
+	        }
            
            user.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userRepository.save(user);

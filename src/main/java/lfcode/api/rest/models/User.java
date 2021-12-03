@@ -2,12 +2,16 @@ package lfcode.api.rest.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -28,7 +32,9 @@ public class User implements Serializable{
 	
 	private String username;
 	
+	
 	private String password;
+	
 	
 	 @Column(nullable = false)
 	 @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
@@ -38,6 +44,10 @@ public class User implements Serializable{
 	 @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
 	 private LocalDateTime lastUpdateDate;
 
+	 @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+	 private List<Phone> phone = new ArrayList<Phone>();
+	 
+	 
 	public Long getId() {
 		return id;
 	}
@@ -84,6 +94,16 @@ public class User implements Serializable{
 
 	public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
+	}
+	
+	
+
+	public List<Phone> getPhone() {
+		return phone;
+	}
+
+	public void setPhone(List<Phone> phone) {
+		this.phone = phone;
 	}
 
 	@Override
