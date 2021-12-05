@@ -27,7 +27,7 @@ public class Phone {
 	@JsonIgnore
 	@ForeignKey(name= "userid")
 	@ManyToOne(optional = false)
-	private User user;
+	private UserModel user;
 
 	public Long getId() {
 		return id;
@@ -53,11 +53,11 @@ public class Phone {
 		this.type = type;
 	}
 
-	public User getUser() {
+	public UserModel getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserModel user) {
 		this.user = user;
 	}
 	

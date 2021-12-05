@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name= "TB_USERS")
-public class User implements UserDetails  {
+public class UserModel implements UserDetails  {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -140,7 +140,7 @@ public class User implements UserDetails  {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		UserModel other = (UserModel) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
