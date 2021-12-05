@@ -25,7 +25,11 @@
 
 The following tools were used in the construction of the project:
 
-<p>* Spring</p>
+<p>* Spring Boot</p>
+<p>* Spring Web</p>
+<p>* Spring Validation </p>
+<p>* Spring Security </p>
+<p>* JPA </p>
 <p>* Java 11</p>
 <p>* Postgresql</p>
 

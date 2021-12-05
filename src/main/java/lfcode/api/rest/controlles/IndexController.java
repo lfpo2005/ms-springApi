@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lfcode.api.rest.models.User;
+import lfcode.api.rest.models.UserModel;
 import lfcode.api.rest.repositories.UserRepository;
 
 @RestController
@@ -31,26 +31,26 @@ public class IndexController {
 	
 	
 	@GetMapping
-	public ResponseEntity<List<User>> getAllUsers() {
+	public ResponseEntity<List<UserModel>> getAllUsers() {
 		
-		List<User> users = (List<User>) userRepository.findAll();
+		List<UserModel> users = (List<UserModel>) userRepository.findAll();
 		
 		
 		return ResponseEntity.status(HttpStatus.OK).body(users);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getOneUser(@PathVariable(value = "id") Long id){
+	public ResponseEntity<UserModel> getOneUser(@PathVariable(value = "id") Long id){
 		
-		 Optional<User> userOptional = userRepository.findById(id);
+		 Optional<UserModel> userOptional = userRepository.findById(id);
 
 
-	            return new  ResponseEntity<User>(userOptional.get(), HttpStatus.OK);
+	            return new  ResponseEntity<UserModel>(userOptional.get(), HttpStatus.OK);
 
 		}
 	
 	@PostMapping(value = "/signup")
-	public ResponseEntity<User> registerUser(@RequestBody User user){
+	public ResponseEntity<UserModel> registerUser(@RequestBody UserModel user){
 		
 
 	        user.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
@@ -67,9 +67,9 @@ public class IndexController {
 	
 	
 	@PutMapping("/updateUser/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id){
+    public ResponseEntity<UserModel> updateUser(@PathVariable(value = "id") Long id){
 		
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<UserModel> userOptional = userRepository.findById(id);
 
            var user = userOptional.get();
            
@@ -86,7 +86,7 @@ public class IndexController {
 	  @DeleteMapping("/{id}")
 	    public ResponseEntity<String> deleteUser(@PathVariable(value = "id") Long id){
 		  
-	        Optional<User> userOptional = userRepository.findById(id);
+	        Optional<UserModel> userOptional = userRepository.findById(id);
 
 	            userRepository.delete(userOptional.get());
 	            return ResponseEntity.status(HttpStatus.OK).body("User deleted success");
