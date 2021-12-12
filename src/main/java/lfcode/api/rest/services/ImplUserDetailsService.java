@@ -25,7 +25,7 @@ public class ImplUserDetailsService implements UserDetailsService {
         }
 
         return new org.springframework.security.core.userdetails.User(
-        		userModel.getUsername(),
+        		userModel.getLogin(),
         		userModel.getPassword(),
         		userModel.getAuthorities());
     }

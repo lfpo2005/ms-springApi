@@ -74,7 +74,7 @@ public class JWTTokenAuthenticationService {
 				if (userModel != null) {
 					
 					return new UsernamePasswordAuthenticationToken(
-							userModel.getUsername(),
+							userModel.getLogin(),
 							userModel.getPassword(),
 							userModel.getAuthorities());
 				}

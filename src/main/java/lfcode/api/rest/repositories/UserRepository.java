@@ -9,7 +9,7 @@ import lfcode.api.rest.models.UserModel;
 @Repository
 public interface UserRepository extends CrudRepository<UserModel, Long> {
 
-    @Query("select u from User u where u.username = ?1")
-    UserModel findUserByLogin(String username);
+    @Query("select u from UserModel u where u.login = ?1")
+    UserModel findUserByLogin(String login);
 
 }

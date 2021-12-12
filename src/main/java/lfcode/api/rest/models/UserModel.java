@@ -40,7 +40,7 @@ public class UserModel implements UserDetails  {
 	
 	private String email;
 	
-	private String username;
+	private String login;
 
 	private String password;
 	
@@ -58,14 +58,31 @@ public class UserModel implements UserDetails  {
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	 @JoinTable(name = "user_role", uniqueConstraints = @UniqueConstraint(
-			 columnNames = {"user_id", "role_id"}, name = "unique_role_user"),
-	 		 joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", table = "TB_USERS", unique = false,
-			 foreignKey = @ForeignKey(name = "user_fk", value = ConstraintMode.CONSTRAINT)),
-			 inverseJoinColumns = @JoinColumn (name = "role_id", referencedColumnName = "id", table = "TB_ROLES", unique = false, updatable = false,
-			 foreignKey = @ForeignKey(name = "role_fk", value = ConstraintMode.CONSTRAINT)))
-	 private List<Role> roles;
+			 columnNames = {"user_id", "role_id"},
+			 name = "unique_role_user"),
+	 		 joinColumns = @JoinColumn(name = "user_id",
+	 		 referencedColumnName = "id",
+	 		 table = "TB_USERS", unique = false,
+			 foreignKey = @ForeignKey(name = "user_fk", 
+			 value = ConstraintMode.CONSTRAINT)),
+			 inverseJoinColumns = @JoinColumn (
+					 name = "role_id", referencedColumnName = "id",
+					 table = "TB_ROLES",
+					 unique = false, updatable = false,
+			 foreignKey = @ForeignKey(
+					 name = "role_fk",
+					 value = ConstraintMode.CONSTRAINT)))
+	 private List<Role> roles = new ArrayList<>();
 	 
 	 
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -82,14 +99,7 @@ public class UserModel implements UserDetails  {
 		this.email = email;
 	}
 
-	public String getUsername() {
-		return this.username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
+	
 	public String getPassword() {
 		return this.password;
 	}
@@ -174,9 +184,19 @@ public class UserModel implements UserDetails  {
 	public boolean isEnabled() {
 		return true;
 	}
-	 
-	 
-	 
-	
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	@Override
+	public String getUsername() {
+		
+		return login;
+	}
 	
 }
