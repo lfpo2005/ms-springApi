@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,12 +31,13 @@ public class IndexController {
 	@Autowired
 	UserRepository userRepository;
 	
-	
+	@Cacheable("cacheUserAll")
 	@GetMapping
-	public ResponseEntity<List<UserModel>> getAllUsers() {
+	public ResponseEntity<List<UserModel>> getAllUsers() throws InterruptedException {
 		
 		List<UserModel> users = (List<UserModel>) userRepository.findAll();
 		
+		Thread.sleep(6000); /** Simula uma sobre carga de 6 segundos para fazer teste cache */
 		
 		return ResponseEntity.status(HttpStatus.OK).body(users);
 	}
