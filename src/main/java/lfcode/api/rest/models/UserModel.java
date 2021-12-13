@@ -25,6 +25,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -37,19 +38,19 @@ public class UserModel implements UserDetails  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+	@Column(nullable = false, unique = true, length = 50)
 	private String email;
-	
+	@Column(nullable = false, unique = true, length = 50)
 	private String login;
-
+	
 	private String password;
 	
 	
-	 @Column(nullable = false)
+	 
 	 @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
 	 private LocalDateTime creationDate;
 	 
-	 @Column(nullable = false)
+	 
 	 @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
 	 private LocalDateTime lastUpdateDate;
 
@@ -163,23 +164,23 @@ public class UserModel implements UserDetails  {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 	
-
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
-
+	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
 		return true;
@@ -193,6 +194,7 @@ public class UserModel implements UserDetails  {
 		this.login = login;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getUsername() {
 		

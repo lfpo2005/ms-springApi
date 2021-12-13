@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,8 @@ public class IndexController {
 	        for (int pos = 0; pos < user.getPhone().size(); pos ++ ) {
 	        	user.getPhone().get(pos).setUser(user);
 	        }
+	        String passwordCripto = new BCryptPasswordEncoder().encode(user.getPassword());
+	        user.setPassword(passwordCripto);
 	        userRepository.save(user);
 
 	        return ResponseEntity.status(HttpStatus.CREATED).body(user);
@@ -67,17 +70,19 @@ public class IndexController {
 	
 	
 	@PutMapping("/updateUser/{id}")
-    public ResponseEntity<UserModel> updateUser(@PathVariable(value = "id") Long id){
+    public ResponseEntity<UserModel> updateUser(@PathVariable(value = "id") Long id,  @RequestBody UserModel user){
 		
-        Optional<UserModel> userOptional = userRepository.findById(id);
+        //Optional<UserModel> userOptional = userRepository.findById(id);
 
-           var user = userOptional.get();
+           //var user = userOptional.get();
            
            for (int pos = 0; pos < user.getPhone().size(); pos ++ ) {
 	        	user.getPhone().get(pos).setUser(user);
 	        }
            
            user.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+           String passwordCripto = new BCryptPasswordEncoder().encode(user.getPassword());
+	        user.setPassword(passwordCripto);
             userRepository.save(user);
             return ResponseEntity.status(HttpStatus.OK).body(user);
         }

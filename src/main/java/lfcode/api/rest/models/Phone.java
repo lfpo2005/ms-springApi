@@ -1,5 +1,6 @@
 package lfcode.api.rest.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +20,7 @@ public class Phone {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+	@Column(unique = true, length = 12)
 	private String number; 
 	
 	private String type; 

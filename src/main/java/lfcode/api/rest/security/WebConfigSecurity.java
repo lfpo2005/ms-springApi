@@ -48,7 +48,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-		/** Service ira consutal user no db */
+		/** Service ira consulta user no db */
 		auth.userDetailsService(implUserDetailsService)
 		/*padrão de cliptocrafia de senha*/
 		.passwordEncoder(new BCryptPasswordEncoder());
