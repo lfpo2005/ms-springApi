@@ -38,15 +38,20 @@ public class UserModel implements UserDetails  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	@Column(nullable = false, unique = true, length = 50)
 	private String email;
+	
 	@Column(nullable = false, unique = true, length = 50)
 	private String login;
 	
 	private String password;
 	
+	private String token;
 	
-	 
+	private String cpf;
+	
+		 
 	 @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
 	 private LocalDateTime creationDate;
 	 
@@ -126,6 +131,21 @@ public class UserModel implements UserDetails  {
 	}
 	
 	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 
 	public List<Phone> getPhone() {
 		return phone;

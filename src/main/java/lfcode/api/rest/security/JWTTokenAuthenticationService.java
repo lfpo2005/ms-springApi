@@ -21,8 +21,8 @@ import lfcode.api.rest.repositories.UserRepository;
 @Component
 public class JWTTokenAuthenticationService {
 	
-	/** Tempo de validade do TOKEN - 2 dias*/
-	private static final long EXPIRATION_TIME = 172800000;
+	/** Tempo de validade do TOKEN - 120 dias*/
+	private static final long EXPIRATION_TIME = 120 * 86400000;
 
 	/** senha unica para compor a autenticação  e ajudar na segurança*/
 	private static final String SECRET = "Fernando_Oliveira_TOKEN";
@@ -62,9 +62,11 @@ public class JWTTokenAuthenticationService {
 		
 		if (token != null) {
 			
+			String tokenClear = token.replace(TOKEN_PREFIX, "").trim();
+			
 			/* faz a validação do token do user na requisição*/
 			String user = Jwts.parser().setSigningKey(SECRET)
-								.parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+								.parseClaimsJws(tokenClear)
 								.getBody().getSubject();
 			if(user != null) {
 				
@@ -73,10 +75,13 @@ public class JWTTokenAuthenticationService {
 				
 				if (userModel != null) {
 					
+					if (tokenClear.equalsIgnoreCase(userModel.getToken())) {
+					
 					return new UsernamePasswordAuthenticationToken(
 							userModel.getLogin(),
 							userModel.getPassword(),
 							userModel.getAuthorities());
+					}
 				}
 			
 			}
