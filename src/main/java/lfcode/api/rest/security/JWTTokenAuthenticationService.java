@@ -55,7 +55,7 @@ public class JWTTokenAuthenticationService {
 		
 	}
 	/** Retorna o usuario valido com token ou caso ñ  seja valido retorna nuul */
-	public Authentication getAuthentication(HttpServletRequest request) {
+	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response ) {
 		
 		/* Pega o token enviado no cabeçalho http */
 		String token = request.getHeader(HEADER_STRING);
@@ -87,7 +87,30 @@ public class JWTTokenAuthenticationService {
 			}
 		}
 		
+			/** Liberando o Cors*/
+			releaseCors(response);
+
 			return null; /* não autorizado*/
 		}
+	private void releaseCors(HttpServletResponse response) {
+		
+		if (response.getHeader("Access-Control-Allow-Origin") == null) {
+			response.addHeader("Access-Control-Allow-Origin", "*");		
+		}
+		
+		if (response.getHeader("Access-Control-Allow-Headers") == null) {
+			response.addHeader("Access-Control-Allow-Headers", "*");		
+		}
+		
+		if (response.getHeader("Access-Control-Request-Headers") == null) {
+			response.addHeader("Access-Control-Request-Headers", "*");		
+		}
+		
+		if (response.getHeader("Access-Control-Allow-Methods") == null) {
+			response.addHeader("Access-Control-Allow-Methods", "*");		
+		}
+	
+		
+	}
 	}		
 

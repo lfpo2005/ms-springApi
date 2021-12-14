@@ -2,6 +2,7 @@ package lfcode.api.rest.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,27 +21,30 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private ImplUserDetailsService implUserDetailsService;
 	
-	/* Configura as solicitatções de acesso via http*/
+	/** Configura as solicitatções de acesso via http*/
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		/* Ativa a proteção contra user ñ estão validados por TOKEN */		
+		/** Ativa a proteção contra user ñ estão validados por TOKEN */		
 		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				
-		/* Ativando a pagina principal*/		
+		/** Ativando a pagina principal*/		
 		.disable().authorizeRequests().antMatchers("/").permitAll()
 		.antMatchers("/index").permitAll()
 		
-		/* URL de Logout- Redireciona apos o user deslogar*/
+		/** libere cors para todas as chamadas */
+		.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()		
+		
+		/** URL de Logout- Redireciona apos o user deslogar*/
 		.anyRequest().authenticated().and().logout().logoutSuccessUrl("/index")
 		
 		/*Mapeia a URL de Logout e invalida user*/
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 		
-		/* Filtra as req de login para a autenticação */
+		/** Filtra as req de login para a autenticação */
 		.and().addFilterBefore(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
 
-		/* Filtra demais req para verificar TOKEN JWT no HEADER HTTP*/
+		/** Filtra demais req para verificar TOKEN JWT no HEADER HTTP*/
 		.addFilterBefore(new JWTApiAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);		
 
 	}
@@ -50,7 +54,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 
 		/** Service ira consulta user no db */
 		auth.userDetailsService(implUserDetailsService)
-		/*padrão de cliptocrafia de senha*/
+		/** padrão de cliptocrafia de senha*/
 		.passwordEncoder(new BCryptPasswordEncoder());
 	}
 
