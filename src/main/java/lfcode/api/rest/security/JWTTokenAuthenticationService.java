@@ -22,7 +22,7 @@ import lfcode.api.rest.repositories.UserRepository;
 public class JWTTokenAuthenticationService {
 	
 	/** Tempo de validade do TOKEN - 120 dias*/
-	private static final long EXPIRATION_TIME = 120 * 86400000;
+	private static final long EXPIRATION_TIME = 1200; //120 * 86400000;
 
 	/** senha unica para compor a autenticação  e ajudar na segurança*/
 	private static final String SECRET = "Fernando_Oliveira_TOKEN";
@@ -60,6 +60,8 @@ public class JWTTokenAuthenticationService {
 		/* Pega o token enviado no cabeçalho http */
 		String token = request.getHeader(HEADER_STRING);
 		
+		try {
+			
 		if (token != null) {
 			
 			String tokenClear = token.replace(TOKEN_PREFIX, "").trim();
@@ -85,6 +87,12 @@ public class JWTTokenAuthenticationService {
 				}
 			
 			}
+		}
+		}catch (io.jsonwebtoken.ExpiredJwtException e){
+			try {
+				response.getOutputStream().println("Your Token is expired, login again!");
+			} catch (IOException e1) { }
+			
 		}
 		
 			/** Liberando o Cors*/
