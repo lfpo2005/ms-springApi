@@ -21,8 +21,9 @@ public class Phone {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(unique = true, length = 12)
-	private String number; 
 	
+	private String number; 
+	@Column( length = 25)
 	private String type; 
 	
 	@JsonIgnore

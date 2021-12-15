@@ -14,7 +14,8 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_role")
     private Long id;
-
+    
+    @Column(length = 25)
     private String nameRole;
 
     @Override

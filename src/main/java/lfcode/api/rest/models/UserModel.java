@@ -9,6 +9,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -27,6 +29,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lfcode.api.rest.enums.UserStatus;
+
 
 @Entity
 @Table(name= "TB_USERS")
@@ -38,27 +42,37 @@ public class UserModel implements UserDetails  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	@Column(nullable = false, length = 150)
+    private String fullName;
 	
 	@Column(nullable = false, unique = true, length = 50)
 	private String email;
 	
-	@Column(nullable = false, unique = true, length = 50)
+	@Column(nullable = false, length = 20)
+	@Enumerated(EnumType.STRING)
+	private UserStatus UserStatus;
+	
+	@Column(nullable = false, unique = true, length = 20)
 	private String login;
 	
 	private String password;
 	
 	private String token;
-	
+	@Column(nullable = false, unique = true, length = 20)
 	private String cpf;
 	
+	@Column(length = 500)
+    private String imageUrl;
 		 
 	 @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
 	 private LocalDateTime creationDate;
 	 
-	 
+	 @Column(nullable = false)
 	 @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
 	 private LocalDateTime lastUpdateDate;
-
+	 
+	 @Column(nullable = false)
 	 @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	 private List<Phone> phone = new ArrayList<Phone>();
 
@@ -178,6 +192,32 @@ public class UserModel implements UserDetails  {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	
+	
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public UserStatus getUserStatus() {
+		return UserStatus;
+	}
+
+	public void setUserStatus(UserStatus userStatus) {
+		UserStatus = userStatus;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	@Override
