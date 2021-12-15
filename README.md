@@ -16,7 +16,7 @@
 - [x] User registration
 - [x] Phone list
 - [x] Security
-- [ ] Token (JWT)
+- [x] Token (JWT)
 - [ ] Deploy
 - [ ] FrontEnd
 

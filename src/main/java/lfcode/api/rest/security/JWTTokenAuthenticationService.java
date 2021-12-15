@@ -50,6 +50,9 @@ public class JWTTokenAuthenticationService {
 		/** Adiciona no cabeçalho http */
 		response.addHeader(HEADER_STRING, token);
 		
+		ApplicationContextLoad.getApplicationContext()
+		.getBean(UserRepository.class).updateTokenUser(JWT, username);
+		
 		/** Adiciona token como resposta body http */
 		response.getWriter().write("{\"Authorization\": \""+token+"\"}");
 		
